@@ -53,7 +53,7 @@ class InteractiveController:
 
         click = clicker.Click(is_positive=is_positive, coords=(y, x))
         self.clicker.add_click(click)
-        pred = self.predictor.get_prediction(self.clicker, prev_mask=self._init_mask)
+        pred = self.predictor.get_prediction(self.clicker, prev_mask=None)
         if self._init_mask is not None and len(self.clicker) == 1:
             pred = self.predictor.get_prediction(self.clicker, prev_mask=self._init_mask)
 

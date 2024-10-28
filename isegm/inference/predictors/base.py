@@ -63,12 +63,15 @@ class BasePredictor(object):
         )
 
         pred_logits = self._get_prediction(image_nd, clicks_lists, is_image_changed)
+        print("logits", pred_logits.shape, pred_logits)
         prediction = F.interpolate(pred_logits, mode='bilinear', align_corners=True,
                                    size=image_nd.size()[2:])
 
         for t in reversed(self.transforms):
             prediction = t.inv_transform(prediction)
-
+        
+        print("pred", prediction.shape, prediction)
+        
         if self.zoom_in is not None and self.zoom_in.check_possible_recalculation():
             return self.get_prediction(clicker)
 
@@ -77,7 +80,7 @@ class BasePredictor(object):
 
     def _get_prediction(self, image_nd, clicks_lists, is_image_changed):
         points_nd = self.get_points_nd(clicks_lists)
-        return self.net(image_nd, points_nd)['instances']
+        return self.net(image_nd.to(self.device), points_nd.to(self.device))['instances']
 
     def _get_transform_states(self):
         return [x.get_state() for x in self.transforms]

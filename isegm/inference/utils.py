@@ -40,8 +40,13 @@ def load_single_is_model(state_dict, device, eval_ritm, **kwargs):
 
     for param in model.parameters():
         param.requires_grad = False
+    
     model.to(device)
     model.eval()
+
+    if device == torch.device('xpu'):
+        import intel_extension_for_pytorch as ipex
+        model = ipex.optimize(model, dtype=torch.float32)
 
     return model
 

@@ -175,11 +175,11 @@ class InteractiveDemoApp(ttk.Frame):
     def _load_image_callback(self):
         self.menubar.focus_set()
         if self._check_entry(self):
-            filename = filedialog.askopenfilename(parent=self.master, filetypes=[
+            self.master.update()
+            filename = filedialog.askopenfilename(parent=self.master, initialdir='/home/nth233/Pictures', filetypes=[
                 ("Images", "*.jpg *.jpeg *.png *.bmp *.tiff *.tif"),
                 ("All files", "*.*"),
             ], title="Chose an image")
-
             if len(filename) > 0:
                 image = cv2.cvtColor(cv2.imread(filename), cv2.COLOR_BGR2RGB)
                 self.controller.set_image(image)

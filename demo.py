@@ -34,6 +34,9 @@ def parse_args():
 
     parser.add_argument('--gpu', type=int, default=0,
                         help='Id of GPU to use.')
+    
+    parser.add_argument('--xpu', action='store_true', default=False,
+                        help='Use XPU for inference.')
 
     parser.add_argument('--cpu', action='store_true', default=False,
                         help='Use only CPU for inference.')
@@ -50,6 +53,9 @@ def parse_args():
     args = parser.parse_args()
     if args.cpu:
         args.device =torch.device('cpu')
+    elif args.xpu:
+        import intel_extension_for_pytorch as ipex
+        args.device = torch.device(f'xpu:{args.gpu}')
     else:
         args.device = torch.device(f'cuda:{args.gpu}')
     cfg = exp.load_config_file(args.cfg, return_edict=True)
